@@ -1,6 +1,8 @@
 from flask import Flask, json, Response
+import os
 
 app = Flask(__name__)
+base_path = os.path.dirname(os.path.abspath(__file__))
 
 @app.route('/')
 def index():
@@ -8,18 +10,18 @@ def index():
 
 @app.route('/totals')
 def totals():
-    with open('totals.json') as f:
+    with open(os.path.join(base_path, 'totals.json')) as f:
         return Response(f.read(), mimetype='application/json')
 
 @app.route('/state/<state>')
 def state_results(state):
-    with open('output.json') as f:
+    with open(os.path.join(base_path, 'output.json')) as f:
         res = json.load(f)
         return Response(json.dumps(res.get(state, {})), mimetype='application/json')
 
 @app.route('/party/<party>')
 def party_results(party):
-    with open('output.json') as f:
+    with open(os.path.join(base_path, 'output.json')) as f:
         res = json.load(f)
         part = {}
         for state, r in res.iteritems():
